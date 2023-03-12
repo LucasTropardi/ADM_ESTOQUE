@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<inherited Version="2023.1" DotMatrixReport="False" IniFile="\Software\Fast Reports" PreviewOptions.Buttons="167935" PreviewOptions.Zoom="1" PrintOptions.Printer="Default" PrintOptions.PrintOnSheet="0" ReportOptions.CreateDate="44924,7287452778" ReportOptions.Description.Text="" ReportOptions.LastChange="44946,8769179398" ScriptLanguage="PascalScript" ScriptText.Text="begin&#13;&#10;&#13;&#10;end.">
+  <Datasets>
+    <item DataSet="DataSet_pesq_padrao" DataSetName="frxDBDataset1"/>
+  </Datasets>
+  <Variables>
+    <item Name=" Data"/>
+    <item Name="Data_ini"/>
+    <item Name="Data_fim"/>
+    <item Name="nome"/>
+    <item Name="Qtde"/>
+    <item Name="Valor_venda"/>
+  </Variables>
+  <TfrxDataPage Name="Data" HGuides.Text="" VGuides.Text="" Height="1000" Left="0" Top="0" Width="1000"/>
+  <TfrxReportPage Name="Page1" HGuides.Text="" VGuides.Text="" PaperWidth="210" PaperHeight="297" PaperSize="9" LeftMargin="10" RightMargin="10" TopMargin="10" BottomMargin="10" ColumnWidth="0" ColumnPositions.Text="" Frame.Typ="15" MirrorMode="0">
+    <TfrxReportTitle Name="ReportTitle1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Frame.Typ="0" Height="94,48818898" Left="0" Top="18,89765" Width="718,1107">
+      <TfrxMemoView Name="Memo1" Align="baWidth" AllowVectorExport="True" Left="0" Top="7,55906" Width="718,1107" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="1" Frame.Typ="0" HAlign="haCenter" ParentFont="False" Text="RELATÓRIO DE VENDAS AGRUPARAS POR FORMA DE PAGAMENTO"/>
+      <TfrxMemoView Name="Data_ini" IndexTag="1" AllowVectorExport="True" Left="249,44898" Top="60,47248" Width="60,47248" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" Frame.Typ="0" HAlign="haCenter" ParentFont="False" Text="[Data_ini]"/>
+      <TfrxMemoView Name="Data_fim" IndexTag="1" AllowVectorExport="True" Left="359,05535" Top="60,47248" Width="60,47248" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" Frame.Typ="0" HAlign="haCenter" ParentFont="False" Text="[Data_fim]"/>
+      <TfrxMemoView Name="Memo6" AllowVectorExport="True" Left="294,80334" Top="30,23624" Width="94,48825" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="1" Frame.Typ="0" HAlign="haCenter" ParentFont="False" Text="No período de:"/>
+      <TfrxMemoView Name="Memo7" AllowVectorExport="True" Left="317,48052" Top="60,47248" Width="34,01577" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="1" Frame.Typ="0" HAlign="haCenter" ParentFont="False" Text="a"/>
+      <TfrxPictureView Name="Picture1" AllowVectorExport="True" Left="7,55906" Top="3,77953" Width="702,99258" Height="86,92919" Frame.Typ="15" HightQuality="False" Transparent="False" TransparentColor="16777215"/>
+    </TfrxReportTitle>
+    <TfrxPageHeader Name="PageHeader1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Frame.Typ="0" Height="34,01577" Left="0" Top="136,06308" Width="718,1107">
+      <TfrxMemoView Name="Memo2" AllowVectorExport="True" Left="0" Top="11,33859" Width="120,94496" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" Frame.Typ="0" HAlign="haCenter" ParentFont="False" Text="Qtde vendas"/>
+      <TfrxMemoView Name="Memo3" AllowVectorExport="True" Left="120,94496" Top="11,33859" Width="151,1812" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" Frame.Typ="0" HAlign="haCenter" ParentFont="False" Text="Valores de vendas"/>
+      <TfrxMemoView Name="Memo4" AllowVectorExport="True" Left="351,49629" Top="11,33859" Width="366,61441" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" Frame.Typ="0" HAlign="haCenter" ParentFont="False" Text="Forma de Pagamento"/>
+    </TfrxPageHeader>
+    <TfrxMasterData Name="MasterData1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Frame.Typ="0" Height="18,8976378" Left="0" Top="230,55133" Width="718,1107" ColumnWidth="0" ColumnGap="0" DataSet="DataSet_pesq_padrao" DataSetName="frxDBDataset1" RowCount="0">
+      <TfrxMemoView Name="frxDBDataset1QTDE_COMPRAS" IndexTag="1" Align="baWidth" AllowVectorExport="True" Left="0" Top="0" Width="120,94496" Height="18,89765" DataField="QTDE_VENDA" DataSet="DataSet_pesq_padrao" DataSetName="frxDBDataset1" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="0" Frame.Typ="15" HAlign="haCenter" ParentFont="False" Text="[frxDBDataset1.&#34;QTDE_VENDA&#34;]"/>
+      <TfrxMemoView Name="frxDBDataset1VALOR_COMPRA" IndexTag="1" Align="baWidth" AllowVectorExport="True" Left="120,94496" Top="0" Width="151,1812" Height="18,89765" DataField="VALOR_VENDA" DataSet="DataSet_pesq_padrao" DataSetName="frxDBDataset1" DisplayFormat.DecimalSeparator="," DisplayFormat.FormatStr="%2.2m" DisplayFormat.Kind="fkNumeric" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="0" Frame.Typ="15" HAlign="haCenter" ParentFont="False" Text="[frxDBDataset1.&#34;VALOR_VENDA&#34;]"/>
+      <TfrxMemoView Name="frxDBDataset1ID" IndexTag="1" Align="baWidth" AllowVectorExport="True" Left="272,12616" Top="0" Width="79,37013" Height="18,89765" DataField="ID" DataSet="DataSet_pesq_padrao" DataSetName="frxDBDataset1" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="0" Frame.Typ="15" HAlign="haCenter" ParentFont="False" Text="[frxDBDataset1.&#34;ID&#34;]"/>
+      <TfrxMemoView Name="frxDBDataset1FORMA_PGTO" IndexTag="1" Align="baWidth" AllowVectorExport="True" Left="351,49629" Top="0" Width="366,61441" Height="18,89765" DataField="FORMA_PGTO" DataSet="DataSet_pesq_padrao" DataSetName="frxDBDataset1" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="0" Frame.Typ="15" HAlign="haCenter" ParentFont="False" Text="[frxDBDataset1.&#34;FORMA_PGTO&#34;]"/>
+    </TfrxMasterData>
+    <TfrxReportSummary Name="ReportSummary1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Frame.Typ="0" Height="68,03154" Left="0" Top="309,92146" Width="718,1107">
+      <TfrxMemoView Name="Qtde" IndexTag="1" AllowVectorExport="True" Left="279,68522" Top="30,23624" Width="204,09462" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="1" Frame.Typ="15" HAlign="haCenter" ParentFont="False" Text="[Qtde]"/>
+      <TfrxMemoView Name="Valor_venda" IndexTag="1" AllowVectorExport="True" Left="483,77984" Top="30,23624" Width="234,33086" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="1" Frame.Typ="15" HAlign="haCenter" ParentFont="False" Text="[Valor_venda]"/>
+    </TfrxReportSummary>
+    <TfrxPageFooter Name="PageFooter1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Frame.Typ="0" Height="22,67718" Left="0" Top="400,63018" Width="718,1107">
+      <TfrxMemoView Name="Memo5" AllowVectorExport="True" Left="343,93723" Top="0" Width="68,03154" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="0" Frame.Typ="0" HAlign="haCenter" ParentFont="False" Text="Emitido por:"/>
+      <TfrxMemoView Name="nome" IndexTag="1" AllowVectorExport="True" Left="415,7483" Top="0" Width="109,60637" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[nome]"/>
+      <TfrxMemoView Name="Date" IndexTag="1" AllowVectorExport="True" Left="525,35467" Top="0" Width="79,37013" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="0" Frame.Typ="0" HAlign="haCenter" ParentFont="False" Text="[Date]"/>
+      <TfrxMemoView Name="Time" IndexTag="1" AllowVectorExport="True" Left="604,7248" Top="0" Width="79,37013" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="0" Frame.Typ="0" HAlign="haCenter" ParentFont="False" Text="[Time]"/>
+      <TfrxMemoView Name="Page" IndexTag="1" AllowVectorExport="True" Left="684,09493" Top="0" Width="41,57483" Height="18,89765" Frame.Typ="0" Text="[Page]"/>
+    </TfrxPageFooter>
+  </TfrxReportPage>
+</inherited>

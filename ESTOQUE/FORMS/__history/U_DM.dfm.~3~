@@ -1,0 +1,18 @@
+object DM: TDM
+  OldCreateOrder = False
+  Height = 495
+  Width = 866
+  object conexao: TFDConnection
+    Left = 64
+    Top = 80
+  end
+  object transacao: TFDTransaction
+    Connection = conexao
+    Left = 136
+    Top = 80
+  end
+  object FDPhysFBDriverLink1: TFDPhysFBDriverLink
+    Left = 216
+    Top = 80
+  end
+end

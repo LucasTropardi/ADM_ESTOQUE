@@ -1,0 +1,50 @@
+inherited Frm_padrao_movimento: TFrm_padrao_movimento
+  Caption = 'Formul'#225'rio Padr'#227'o Movimento'
+  ClientHeight = 644
+  ExplicitHeight = 673
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited Panel2: TPanel
+    Top = 573
+  end
+  inherited DBNavigator1: TDBNavigator
+    Left = 268
+    Top = 581
+    Hints.Strings = ()
+    ExplicitLeft = 268
+    ExplicitTop = 581
+  end
+  object Panel3: TPanel [5]
+    Left = 0
+    Top = 49
+    Width = 998
+    Height = 96
+    Align = alTop
+    Color = clSkyBlue
+    ParentBackground = False
+    TabOrder = 5
+  end
+  object Panel4: TPanel [6]
+    Left = 0
+    Top = 488
+    Width = 998
+    Height = 85
+    Align = alBottom
+    Color = clSkyBlue
+    ParentBackground = False
+    TabOrder = 6
+  end
+  object DBGrid1: TDBGrid [7]
+    Left = 0
+    Top = 145
+    Width = 998
+    Height = 343
+    Align = alClient
+    TabOrder = 7
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+  end
+end

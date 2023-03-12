@@ -1,0 +1,54 @@
+unit U_padrao;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls,
+  Vcl.DBCtrls, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client;
+
+type
+  TFrm_padrao = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    btn_novo: TBitBtn;
+    btn_deletar: TBitBtn;
+    btn_editar: TBitBtn;
+    btn_gravar: TBitBtn;
+    btn_cancelar: TBitBtn;
+    btn_atualizar: TBitBtn;
+    DBNavigator1: TDBNavigator;
+    BitBtn1: TBitBtn;
+    Q_padrao: TFDQuery;
+    ds_padrao: TDataSource;
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frm_padrao: TFrm_padrao;
+
+implementation
+
+{$R *.dfm}
+
+uses U_DM;
+
+procedure TFrm_padrao.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+//Faz a função da tecla TAB
+  if key = #13 then
+  begin
+    key := #0;
+    Perform(wm_nextDlgCtl,0,0);
+  end;
+
+end;
+
+end.

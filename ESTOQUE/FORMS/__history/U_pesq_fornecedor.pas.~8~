@@ -1,0 +1,196 @@
+unit U_pesq_fornecedor;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, U_form_pesquisa_padrao, Data.DB,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.Buttons, Vcl.Mask, Vcl.ExtCtrls,
+  frxClass, frxDBSet;
+
+type
+  TFrm_pesq_fornecedor = class(TFrm_pesquisa_padrao)
+    Q_pesq_padraoID_FORNECEDOR: TIntegerField;
+    Q_pesq_padraoNOME: TStringField;
+    Q_pesq_padraoENDERECO: TStringField;
+    Q_pesq_padraoNUMERO: TIntegerField;
+    Q_pesq_padraoBAIRRO: TStringField;
+    Q_pesq_padraoCIDADE: TStringField;
+    Q_pesq_padraoUF: TStringField;
+    Q_pesq_padraoCEP: TStringField;
+    Q_pesq_padraoTELEFONE: TStringField;
+    Q_pesq_padraoCNPJ: TStringField;
+    Q_pesq_padraoEMAIL: TStringField;
+    Q_pesq_padraoCADASTRO: TDateField;
+    procedure btn_pesquisarClick(Sender: TObject);
+    procedure cb_chave_pesquisaChange(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure btn_transferirClick(Sender: TObject);
+    procedure btn_imprimirClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frm_pesq_fornecedor: TFrm_pesq_fornecedor;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFrm_pesq_fornecedor.btn_imprimirClick(Sender: TObject);
+var caminho : String;
+begin
+
+    //Abre relatório
+  caminho := ExtractFilepath(Application.ExeName);
+  if Frm_pesq_fornecedor.Rel_pesq_padrao.LoadFromFile(caminho + 'Rel_fornecedor.fr3') then
+  begin
+    Rel_pesq_padrao.Clear;
+    Rel_pesq_padrao.LoadFromFile(extractfilepath(application.ExeName) + 'Rel_fornecedor.fr3');
+    Rel_pesq_padrao.PrepareReport(true);
+    Rel_pesq_padrao.ShowPreparedReport;
+  end
+  else
+  Messagedlg('Relatório não encontrado',mtError,[mbOk],0);
+end;
+
+procedure TFrm_pesq_fornecedor.btn_pesquisarClick(Sender: TObject);
+begin
+  inherited;
+
+  Q_pesq_padrao.Close;
+  Q_pesq_padrao.SQL.Add('');
+  Q_pesq_padrao.Params.Clear;
+  Q_pesq_padrao.SQL.Clear;
+  Q_pesq_padrao.SQL.Add('SELECT * FROM FORNECEDOR');
+
+  case cb_chave_pesquisa.ItemIndex of
+    0:begin  //pesquisa por código
+      Q_pesq_padrao.SQL.Add('WHERE ID_FORNECEDOR = :PID_FORNECEDOR');
+      Q_pesq_padrao.ParamByName('PID_FORNECEDOR').asString := ed_nome.Text;
+    end;
+
+    1:begin  //pesquisa por nome
+      Q_pesq_padrao.SQL.Add('WHERE NOME LIKE :PNOME');
+      Q_pesq_padrao.ParamByName('PNOME').asString := '%' +ed_nome.Text + '%';
+    end;
+
+    2:begin  //pesquisa por data
+      Q_pesq_padrao.SQL.Add('WHERE CADASTRO = :PCADASTRO');
+      Q_pesq_padrao.ParamByName('PCADASTRO') .AsDate := StrToDate(mk_inicio.Text);
+    end;
+
+    3:begin //pesquisa por período
+      Q_pesq_padrao.SQL.Add('WHERE CADASTRO BETWEEN :PINICIO AND :PFIM');
+      Q_pesq_padrao.ParamByName('PINICIO') .AsDate := StrToDate(mk_inicio.Text);
+      Q_pesq_padrao.ParamByName('PFIM') .AsDate := StrToDate(mk_fim.Text);
+    end;
+
+    4:begin
+      Q_pesq_padrao.SQL.Add('ORDER BY ID_FORNECEDOR');
+    end;
+
+  end;
+  Q_pesq_padrao.Open;
+
+  if Q_pesq_padrao.IsEmpty then
+  begin
+    Messagedlg('Registro não encontrado.',mtInformation, [mbOk],0);
+  end
+  else
+  abort;
+
+end;
+
+procedure TFrm_pesq_fornecedor.btn_transferirClick(Sender: TObject);
+begin
+  inherited;
+    if Q_pesq_padrao.RecordCount > 0 then
+  begin
+    codigo := Q_pesq_padraoID_FORNECEDOR.AsInteger;
+  end
+  else
+  abort;
+end;
+
+procedure TFrm_pesq_fornecedor.cb_chave_pesquisaChange(Sender: TObject);
+begin
+  case cb_chave_pesquisa.ItemIndex of
+    0:begin //pesquisa pelo codigo
+    ed_nome.Visible := true;
+    ed_nome.SetFocus;
+    mk_inicio.visible := false;
+    mk_fim.VIsible := false;
+    lb_nome.Visible := true;
+    lb_inicio.Visible := false;
+    lb_fim.Visible := false;
+    lb_nome.Caption := 'Digite o código';
+    ed_nome.Clear;
+    end;
+
+    1:begin  //pesquisa pelo nome
+    ed_nome.Visible := true;
+    ed_nome.SetFocus;
+    mk_inicio.visible := false;
+    mk_fim.VIsible := false;
+    lb_nome.Visible := true;
+    lb_inicio.Visible := false;
+    lb_fim.Visible := false;
+    lb_nome.Caption := 'Digite o nome';
+    ed_nome.Clear;
+    end;
+
+     2:begin //seleciona pela data
+    ed_nome.Visible := false;
+    mk_inicio.visible := true;
+    mk_inicio.SetFocus;
+    mk_fim.VIsible := false;
+    lb_nome.Visible := false;
+    lb_inicio.Visible := true;
+    lb_inicio.Caption := 'Digite a data' ;
+    lb_fim.Visible := false;
+    mk_inicio.Clear;
+    end;
+
+    3:begin //seleciona  por periodo
+    ed_nome.Visible := false;
+    mk_inicio.visible := true;
+    mk_fim.VIsible := true;
+    mk_inicio.SetFocus;
+    lb_nome.Visible := false;
+    lb_inicio.Visible := true;
+    lb_fim.Visible := false;
+    lb_inicio.Caption := 'Digite o período';
+    mk_inicio.Clear;
+    mk_fim.Clear;
+
+    end;
+    4:begin //seleciona  por periodo
+    ed_nome.Visible := false;
+    mk_inicio.visible := false;
+    mk_fim.VIsible := false;
+    lb_nome.Visible := false;
+    lb_inicio.Visible := false;
+    lb_fim.Visible := false;
+    lb_nome.Visible := true;
+    lb_nome.Caption := 'Apresentando todos os registros';
+
+
+    end;
+
+end;
+
+end;
+procedure TFrm_pesq_fornecedor.DBGrid1DblClick(Sender: TObject);
+begin
+  inherited;
+  btn_transferir.Click;
+end;
+
+End.

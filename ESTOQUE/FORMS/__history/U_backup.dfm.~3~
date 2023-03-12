@@ -1,0 +1,13 @@
+inherited Frm_backup: TFrm_backup
+  Caption = 'GERENCIADOR DE BACKUP'
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited Panel1: TPanel
+    inherited btn_backup: TBitBtn
+      OnClick = btn_backupClick
+    end
+  end
+  inherited backup: TFDIBBackup
+    Protocol = ipTCPIP
+  end
+end

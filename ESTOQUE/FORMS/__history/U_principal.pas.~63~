@@ -1,0 +1,591 @@
+unit U_principal;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Buttons, Vcl.ExtCtrls, Vcl.ComCtrls,
+  Vcl.Menus, Vcl.StdCtrls;
+
+type
+  TFrm_Principal = class(TForm)
+    Panel1: TPanel;
+    btn_usuario: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    SpeedButton5: TSpeedButton;
+    SpeedButton6: TSpeedButton;
+    SpeedButton7: TSpeedButton;
+    SpeedButton8: TSpeedButton;
+    SpeedButton9: TSpeedButton;
+    SpeedButton10: TSpeedButton;
+    StatusBar1: TStatusBar;
+    Timer1: TTimer;
+    MainMenu1: TMainMenu;
+    Cadastro1: TMenuItem;
+    mn_usuario: TMenuItem;
+    mn_empresa: TMenuItem;
+    mn_cliente: TMenuItem;
+    mn_fornecedor: TMenuItem;
+    mn_produto: TMenuItem;
+    mn_forma_pgto: TMenuItem;
+    Movimento1: TMenuItem;
+    N1: TMenuItem;
+    Vendas1: TMenuItem;
+    Relatrios1: TMenuItem;
+    ListaUsurios: TMenuItem;
+    ListaFornecedores: TMenuItem;
+    ListaClientes: TMenuItem;
+    ListaProdutos: TMenuItem;
+    ListaCompras: TMenuItem;
+    ListaVendas: TMenuItem;
+    Sobreosistema1: TMenuItem;
+    Sobreosistema2: TMenuItem;
+    Fechar1: TMenuItem;
+    ComprasFormadepagamento1: TMenuItem;
+    VendasFormasdepagamento1: TMenuItem;
+    Relatriogeralporperodo1: TMenuItem;
+    btn_conta_pagar: TSpeedButton;
+    btn_conta_receber: TSpeedButton;
+    Contaspagar1: TMenuItem;
+    Listacontasapagar1: TMenuItem;
+    Listacontasareceber1: TMenuItem;
+    Contasreceber1: TMenuItem;
+    MovimentaPreos1: TMenuItem;
+    BackupeRestore1: TMenuItem;
+    Backup1: TMenuItem;
+    Restore1: TMenuItem;
+    procedure Timer1Timer(Sender: TObject);
+    procedure SpeedButton10Click(Sender: TObject);
+    procedure btn_usuarioClick(Sender: TObject);
+    procedure Abre_Tela_Usuario();
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure Abre_Tela_Empresa();
+    procedure mn_empresaClick(Sender: TObject);
+    procedure mn_usuarioClick(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure Abre_Tela_Cliente();
+    procedure mn_clienteClick(Sender: TObject);
+    procedure SpeedButton4Click(Sender: TObject);
+    procedure Abre_Tela_Fornecedor();
+    procedure mn_fornecedorClick(Sender: TObject);
+    procedure SpeedButton5Click(Sender: TObject);
+    procedure Abre_Tela_Produtos();
+    procedure mn_produtoClick(Sender: TObject);
+    procedure SpeedButton6Click(Sender: TObject);
+    procedure Abre_Tela_Forma_Pgto();
+    procedure mn_forma_pgtoClick(Sender: TObject);
+    procedure Abre_Tela_Compra01();
+    procedure SpeedButton7Click(Sender: TObject);
+    procedure N1Click(Sender: TObject);
+    procedure ListaUsuriosClick(Sender: TObject);
+    procedure ListaFornecedoresClick(Sender: TObject);
+    procedure ListaClientesClick(Sender: TObject);
+    procedure ListaProdutosClick(Sender: TObject);
+    procedure ListaComprasClick(Sender: TObject);
+    procedure Sobreosistema2Click(Sender: TObject);
+    procedure SpeedButton9Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure SpeedButton8Click(Sender: TObject);
+    procedure Abre_Tela_Venda();
+    procedure Vendas1Click(Sender: TObject);
+    procedure Abre_Pesq_Venda();
+    procedure ListaVendasClick(Sender: TObject);
+    procedure Fechar1Click(Sender: TObject);
+    procedure ComprasFormadepagamento1Click(Sender: TObject);
+    procedure VendasFormasdepagamento1Click(Sender: TObject);
+    procedure Relatriogeralporperodo1Click(Sender: TObject);
+    procedure btn_conta_pagarClick(Sender: TObject);
+    procedure Abre_Tela_Conta_Pagar();
+    procedure Contaspagar1Click(Sender: TObject);
+    procedure Listacontasapagar1Click(Sender: TObject);
+    procedure Abre_Conta_Receber();
+    procedure btn_conta_receberClick(Sender: TObject);
+    procedure Contasreceber1Click(Sender: TObject);
+    procedure Listacontasareceber1Click(Sender: TObject);
+    procedure MovimentaPreos1Click(Sender: TObject);
+    procedure Backup1Click(Sender: TObject);
+    procedure Restore1Click(Sender: TObject);
+  private
+
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frm_Principal: TFrm_Principal;
+
+implementation
+
+{$R *.dfm}
+
+uses U_usuario, U_empresa, U_cliente, U_fornecedor, U_produto, U_forma_pgto,
+  U_form_pesquisa_padrao, U_compra01, U_pesq_usuario, U_pesq_fornecedor,
+  U_pesq_cliente, U_pesq_produto, U_pesq_compra, U_about, U_DM, U_login,
+  U_venda, U_pesq_venda, U_pesq_compra_forma_pgto, U_pesq_venda_forma_pgto,
+  U_pesq_geral_mes, U_conta_pagar, U_pesq_parcela_pagar, U_conta_receber,
+  U_pesq_contas_receber, U_altera_preco, U_backup, U_restore;
+
+procedure TFrm_Principal.Sobreosistema2Click(Sender: TObject);
+begin
+  Frm_aboutbox := Tfrm_aboutbox.Create(Self);
+  Frm_aboutbox.ShowModal;
+  try
+
+  finally
+    Frm_aboutbox.Free;
+    Frm_aboutbox := nil;
+  end;
+end;
+
+procedure TFrm_Principal.SpeedButton10Click(Sender: TObject);
+begin
+  if Messagedlg('Deseja sair do sistema?',mtConfirmation, [mbOk,mbCancel],0) = mrOk then
+  begin
+    application.Terminate;
+  end
+  else
+  abort;
+end;
+
+
+
+procedure TFrm_Principal.SpeedButton2Click(Sender: TObject);
+begin
+  Abre_Tela_Empresa;
+end;
+
+procedure TFrm_Principal.SpeedButton3Click(Sender: TObject);
+begin
+  Abre_Tela_Cliente;
+end;
+
+procedure TFrm_Principal.SpeedButton4Click(Sender: TObject);
+begin
+  Abre_Tela_Fornecedor;
+end;
+
+procedure TFrm_Principal.SpeedButton5Click(Sender: TObject);
+begin
+  Abre_Tela_Produtos;
+end;
+
+procedure TFrm_Principal.SpeedButton6Click(Sender: TObject);
+begin
+  Abre_Tela_Forma_Pgto;
+end;
+
+procedure TFrm_Principal.SpeedButton7Click(Sender: TObject);
+begin
+  //Abre a tela de compra
+  Abre_Tela_Compra01;
+end;
+
+procedure TFrm_Principal.SpeedButton8Click(Sender: TObject);
+begin
+  Abre_Tela_Venda;
+end;
+
+procedure TFrm_Principal.SpeedButton9Click(Sender: TObject);
+begin
+  //trocar de usuario
+  //janela login apresentando apenas como Show
+  frm_principal.Hide;
+  frm_login.ed_nome.Clear;
+  frm_login.ed_senha.Clear;
+  frm_login.ed_nome.SetFocus;
+end;
+
+procedure TFrm_Principal.Abre_Conta_Receber;
+begin
+  Frm_conta_receber := TFrm_conta_receber.Create(Self);
+  Frm_conta_receber.ShowModal;
+  try
+
+  finally
+    Frm_conta_receber.Free;
+    Frm_conta_receber := Nil;
+  end;
+end;
+
+procedure TFrm_Principal.Abre_Pesq_Venda;
+begin
+  Frm_pesq_venda := Tfrm_pesq_venda.Create(Self);
+  Frm_pesq_venda.ShowModal;
+  try
+
+  finally
+    Frm_pesq_venda.Free;
+    Frm_pesq_venda := Nil;
+  end;
+
+end;
+
+procedure TFrm_Principal.Abre_Tela_Cliente;
+begin
+  Frm_cliente:=Tfrm_cliente.Create(Self);
+  frm_cliente.ShowModal;
+  try
+
+  finally
+  frm_cliente.Free;
+  frm_cliente := nil;
+  end;
+end;
+
+procedure TFrm_Principal.Abre_Tela_Compra01;
+begin
+  //Chama a tela de compra
+  Frm_compra01 := Tfrm_compra01.Create(Self);
+  Frm_compra01.ShowModal;
+  try
+
+  finally
+    Frm_compra01.Free;
+    Frm_compra01 := nil;
+  end;
+end;
+
+procedure TFrm_Principal.Abre_Tela_Conta_Pagar;
+begin
+  Frm_conta_pagar:= TFrm_conta_pagar.Create(Self);
+  Frm_conta_pagar.ShowModal;
+  try
+
+  finally
+    Frm_conta_pagar.Free;
+    Frm_conta_pagar := Nil;
+  end;
+end;
+
+procedure TFrm_Principal.Abre_Tela_Empresa;
+begin
+  Frm_empresa:=Tfrm_empresa.Create(Self);
+  frm_empresa.ShowModal;
+  try
+
+  finally
+  frm_empresa.Free;
+  frm_empresa := nil;
+  end;
+end;
+
+procedure TFrm_Principal.Abre_Tela_Forma_Pgto;
+begin
+  frm_forma_pgto := Tfrm_forma_pgto.Create(Self);
+  frm_forma_pgto.ShowModal;
+  try
+
+  finally
+    frm_forma_pgto.Free;
+    frm_forma_pgto:=nil;
+  end;
+end;
+
+procedure TFrm_Principal.Abre_Tela_Fornecedor;
+begin
+  frm_fornecedor := Tfrm_fornecedor.Create(Self);
+  Frm_fornecedor.ShowModal;
+  try
+
+  finally
+    frm_fornecedor.Free;
+    frm_fornecedor:=nil;
+  end;
+end;
+
+procedure TFrm_Principal.Abre_Tela_Produtos;
+begin
+  Frm_produto := Tfrm_produto.Create(Self);
+  frm_produto.ShowModal;
+  try
+
+  finally
+    frm_produto.Free;
+    frm_produto:=nil;
+  end;
+end;
+
+procedure TFrm_Principal.Abre_Tela_Usuario;
+begin
+  frm_usuario := Tfrm_usuario.Create(Self);
+  Frm_usuario.ShowModal;
+  try
+
+  finally
+    frm_usuario.Free;
+    frm_usuario:=nil;
+  end;
+end;
+
+procedure TFrm_Principal.Abre_Tela_Venda;
+begin
+  Frm_venda := Tfrm_venda.Create(Self);
+  Frm_venda.ShowModal;
+  try
+
+  finally
+    Frm_venda.Free;
+    Frm_venda := Nil;
+  end;
+
+end;
+
+procedure TFrm_Principal.Backup1Click(Sender: TObject);
+begin
+  Frm_backup := Tfrm_backup.Create(Self);
+  Frm_backup.ShowModal;
+  try
+
+  finally
+    Frm_backup.Free;
+    Frm_backup := Nil;
+  end;
+end;
+
+procedure TFrm_Principal.btn_conta_pagarClick(Sender: TObject);
+begin
+  Abre_Tela_Conta_Pagar;
+end;
+
+procedure TFrm_Principal.btn_conta_receberClick(Sender: TObject);
+begin
+  Abre_Conta_Receber;
+end;
+
+procedure TFrm_Principal.btn_usuarioClick(Sender: TObject);
+begin
+  Abre_Tela_Usuario;
+end;
+
+procedure TFrm_Principal.ComprasFormadepagamento1Click(Sender: TObject);
+begin
+  Frm_pesq_compra_forma_pgto := Tfrm_pesq_compra_forma_pgto.Create(Self);
+  Frm_pesq_compra_forma_pgto.ShowModal;
+  try
+
+  finally
+    Frm_pesq_compra_forma_pgto.Free;
+    Frm_pesq_compra_forma_pgto := Nil;
+  end;
+end;
+
+procedure TFrm_Principal.Contaspagar1Click(Sender: TObject);
+begin
+  Abre_Tela_Conta_Pagar;
+end;
+
+procedure TFrm_Principal.Contasreceber1Click(Sender: TObject);
+begin
+  Abre_Conta_Receber;
+end;
+
+procedure TFrm_Principal.Fechar1Click(Sender: TObject);
+begin
+  SpeedButton10.Click;
+end;
+
+procedure TFrm_Principal.FormShow(Sender: TObject);
+begin
+  //Desabilita botão e menu
+  if dm.usuario = 'APOIO' then
+  begin
+    btn_usuario.Enabled := False;
+    SpeedButton2.Enabled := False;
+    mn_usuario.Enabled := False;
+    mn_empresa.Enabled := False;
+    listausurios.Enabled := False
+  end;
+end;
+
+procedure TFrm_Principal.ListaClientesClick(Sender: TObject);
+begin
+  Frm_pesq_cliente := Tfrm_pesq_cliente.Create(Self);
+  Frm_pesq_cliente.ShowModal;
+  try
+
+  finally
+    Frm_pesq_cliente.Free;
+    Frm_pesq_cliente := Nil;
+  end;
+end;
+
+procedure TFrm_Principal.ListaComprasClick(Sender: TObject);
+begin
+    Frm_pesq_compra := Tfrm_pesq_compra.Create(Self);
+  Frm_pesq_compra.ShowModal;
+  try
+
+  finally
+    Frm_pesq_compra.Free;
+    Frm_pesq_compra := Nil;
+  end;
+end;
+
+procedure TFrm_Principal.Listacontasapagar1Click(Sender: TObject);
+begin
+  Frm_pesq_parcela_pagar := Tfrm_pesq_parcela_pagar.Create(Self);
+  Frm_pesq_parcela_pagar.ShowModal;
+  try
+
+  finally
+    Frm_pesq_parcela_pagar.Free;
+    Frm_pesq_parcela_pagar := Nil;
+  end;
+end;
+
+procedure TFrm_Principal.Listacontasareceber1Click(Sender: TObject);
+begin
+  Frm_pesq_parcelas_receber := TFrm_pesq_parcelas_receber.Create(Self);
+  Frm_pesq_parcelas_receber.ShowModal;
+  try
+
+  finally
+    Frm_pesq_parcelas_receber.Free;
+    Frm_pesq_parcelas_receber:=Nil;
+  end;
+end;
+
+procedure TFrm_Principal.ListaFornecedoresClick(Sender: TObject);
+begin
+  Frm_pesq_fornecedor := Tfrm_pesq_fornecedor.Create(Self);
+  Frm_pesq_fornecedor.ShowModal;
+  try
+
+  finally
+    Frm_pesq_fornecedor.Free;
+    Frm_pesq_fornecedor := Nil;
+  end;
+end;
+
+procedure TFrm_Principal.ListaProdutosClick(Sender: TObject);
+begin
+  Frm_pesq_produto := Tfrm_pesq_produto.Create(Self);
+  Frm_pesq_produto.ShowModal;
+  try
+
+  finally
+    Frm_pesq_produto.Free;
+    Frm_pesq_produto := Nil;
+  end;
+end;
+
+procedure TFrm_Principal.ListaUsuriosClick(Sender: TObject);
+begin
+  Frm_pesq_usuario := Tfrm_pesq_usuario.Create(Self);
+  Frm_pesq_usuario.ShowModal;
+  try
+
+  finally
+    Frm_pesq_usuario.Free;
+    Frm_pesq_usuario := Nil;
+  end;
+end;
+
+procedure TFrm_Principal.ListaVendasClick(Sender: TObject);
+begin
+  Abre_Pesq_Venda;
+end;
+
+procedure TFrm_Principal.mn_clienteClick(Sender: TObject);
+begin
+  Abre_Tela_Cliente;
+end;
+
+procedure TFrm_Principal.mn_empresaClick(Sender: TObject);
+begin
+  Abre_Tela_Empresa;
+end;
+
+procedure TFrm_Principal.mn_forma_pgtoClick(Sender: TObject);
+begin
+  Abre_Tela_Forma_Pgto;
+end;
+
+procedure TFrm_Principal.mn_fornecedorClick(Sender: TObject);
+begin
+  Abre_Tela_Fornecedor;
+end;
+
+procedure TFrm_Principal.mn_produtoClick(Sender: TObject);
+begin
+  Abre_Tela_Produtos;
+end;
+
+procedure TFrm_Principal.Timer1Timer(Sender: TObject);
+begin
+  //insere dados na statusbar
+  statusbar1.Panels[0].Text :=DatetoStr(now);
+  statusbar1.Panels[1].Text :=TimetoStr(now);
+  statusbar1.Panels[2].Text :='SEJA BEM VINDO AO SISTEMA, ' + dm.usuario + '!';
+  statusbar1.Panels[3].Text :='Tipo de usuário: ' + dm.tipo_usuario;
+  statusbar1.Panels[4].Text :='Banco conectado: ' + dm.banco;
+end;
+
+procedure TFrm_Principal.Vendas1Click(Sender: TObject);
+begin
+  Abre_Tela_Venda;
+end;
+
+procedure TFrm_Principal.VendasFormasdepagamento1Click(Sender: TObject);
+begin
+  Frm_pesq_venda_forma_pgto := Tfrm_pesq_venda_forma_pgto.Create(Self);
+  Frm_pesq_venda_forma_pgto.ShowModal;
+  try
+
+  finally
+    Frm_pesq_venda_forma_pgto.Free;
+    Frm_pesq_venda_forma_pgto := Nil;
+  end;
+end;
+
+procedure TFrm_Principal.mn_usuarioClick(Sender: TObject);
+begin
+  Abre_Tela_Usuario;
+end;
+
+procedure TFrm_Principal.MovimentaPreos1Click(Sender: TObject);
+begin
+  Frm_altera_preco := TFrm_altera_preco.Create(Self);
+  Frm_altera_preco.ShowModal;
+  try
+
+  finally
+    Frm_altera_preco.Free;
+    Frm_altera_preco := Nil;
+  end;
+end;
+
+procedure TFrm_Principal.N1Click(Sender: TObject);
+begin
+  //Abre a tela de compras
+  Abre_Tela_Compra01;
+end;
+
+procedure TFrm_Principal.Relatriogeralporperodo1Click(Sender: TObject);
+begin
+  Frm_pesq_geral_mes := TFrm_pesq_geral_mes.Create(self);
+  Frm_pesq_geral_mes.ShowModal;
+  try
+
+  finally
+    Frm_pesq_geral_mes.Free;
+    Frm_pesq_geral_mes := Nil;
+  end;
+end;
+
+procedure TFrm_Principal.Restore1Click(Sender: TObject);
+begin
+  Frm_restore := Tfrm_restore.Create(Self);
+  Frm_restore.ShowModal;
+  try
+
+  finally
+    Frm_restore.Free;
+    Frm_restore := Nil;
+  end;
+end;
+
+end.

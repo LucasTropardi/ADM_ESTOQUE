@@ -1,0 +1,126 @@
+unit U_pesq_compra_forma_pgto;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, U_form_pesquisa_padrao, Data.DB,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, frxClass, frxExportBaseDialog, frxExportPDF,
+  frxDBSet, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.Grids, Vcl.DBGrids,
+  Vcl.StdCtrls, Vcl.Buttons, Vcl.DBCtrls, Vcl.Mask, Vcl.ExtCtrls;
+
+type
+  TFrm_pesq_compra_forma_pgto = class(TFrm_pesquisa_padrao)
+    Q_pesq_padraoQTDE_COMPRAS: TLargeintField;
+    Q_pesq_padraoVALOR_COMPRA: TFMTBCDField;
+    Q_pesq_padraoID: TIntegerField;
+    Q_pesq_padraoFORMA_PGTO: TStringField;
+    lb_valor_compra: TLabel;
+    procedure FormShow(Sender: TObject);
+    procedure btn_pesquisarClick(Sender: TObject);
+    procedure Soma_compra();
+    procedure btn_imprimirClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frm_pesq_compra_forma_pgto: TFrm_pesq_compra_forma_pgto;
+
+implementation
+
+{$R *.dfm}
+
+uses U_DM;
+
+procedure TFrm_pesq_compra_forma_pgto.btn_imprimirClick(Sender: TObject);
+var caminho : String;
+begin
+  //inherited;
+    //Abre relatório
+  caminho := ExtractFilepath(Application.ExeName);
+  if Frm_pesq_compra_forma_pgto.Rel_pesq_padrao.LoadFromFile(caminho + 'Rel_compra_forma_pgto.fr3') then
+  begin
+    Rel_pesq_padrao.Clear;
+    Rel_pesq_padrao.LoadFromFile(extractfilepath(application.ExeName) + 'Rel_compra_forma_pgto.fr3');
+    Rel_pesq_padrao.Variables['Data_ini'] := QuotedStr(mk_inicio.Text);
+    Rel_pesq_padrao.Variables['Data_fim'] := QuotedStr(mk_fim.Text);
+    Rel_pesq_padrao.Variables['Qtde'] := QuotedStr(lb_resultado.Caption);
+    Rel_pesq_padrao.Variables['Valor_compra'] := QuotedStr(lb_valor_compra.Caption);
+    Rel_pesq_padrao.Variables['nome'] := QuotedStr(dm.usuario);
+    Rel_pesq_padrao.PrepareReport(true);
+    Rel_pesq_padrao.ShowPreparedReport;
+  end
+  else
+  Messagedlg('Relatório não encontrado',mtError,[mbOk],0);
+
+end;
+
+procedure TFrm_pesq_compra_forma_pgto.btn_pesquisarClick(Sender: TObject);
+begin
+  Q_pesq_padrao.Close;
+  Q_pesq_padrao.SQL.Add('');
+  Q_pesq_padrao.Params.Clear;
+  Q_pesq_padrao.SQL.Clear;
+  Q_pesq_padrao.SQL.Add('SELECT '
+    +'COUNT(A.ID_COMPRA) AS QTDE_COMPRAS, '
+    +'SUM(A.VALOR) AS VALOR_COMPRA, '
+    +'A.ID_FORMA_PGTO AS ID, '
+    +'B.DESCRICAO AS FORMA_PGTO '
+    +'FROM COMPRA A ');
+  Q_pesq_padrao.SQL.Add('INNER JOIN FORMA_PGTO B ON B.ID_FORMA_PGTO = A.ID_FORMA_PGTO ');
+  Q_pesq_padrao.SQL.Add('WHERE A.CADASTRO BETWEEN :PDATA_INI AND :PDATA_FIM ');
+  Q_pesq_padrao.ParamByName('PDATA_INI').AsDate := StrToDate(mk_inicio.Text);
+  Q_pesq_padrao.ParamByName('PDATA_FIM').AsDate := StrToDate(mk_fim.Text);
+  Q_pesq_padrao.SQL.Add('GROUP BY A.ID_FORMA_PGTO, B.DESCRICAO ');
+  Q_pesq_padrao.SQL.Add('ORDER BY A.ID_FORMA_PGTO, B.DESCRICAO;');
+
+  Q_pesq_padrao.Open;
+
+    //mostra a quantidade de registros encontrados
+  lb_resultado.Caption := 'Total de registros localizados: '+ IntToStr(Q_pesq_padrao.RecordCount);
+  //Procedure de somar as compras
+  Soma_compra;
+
+  if Q_pesq_padrao.IsEmpty then
+  begin
+    Messagedlg('Nenhum registro encontrado!',mtInformation,[mbOk],0);
+  end;
+
+
+end;
+
+procedure TFrm_pesq_compra_forma_pgto.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  inherited;
+  Q_pesq_padrao.Close;
+end;
+
+procedure TFrm_pesq_compra_forma_pgto.FormShow(Sender: TObject);
+begin
+  mk_inicio.SetFocus;
+
+end;
+
+procedure TFrm_pesq_compra_forma_pgto.Soma_compra;
+var soma : Currency;
+begin
+  soma := 0;
+  //soma quantidade de compras
+  Q_pesq_padrao.First;
+  while not Q_pesq_padrao.Eof do
+  begin
+    soma := soma + Q_pesq_padraoVALOR_COMPRA.AsCurrency;
+    Q_pesq_padrao.Next;
+  end;
+  lb_valor_compra.Caption := 'Valor em compras: ' + FormatFloat(' R$ ##,##0.00',(soma));
+
+end;
+
+end.

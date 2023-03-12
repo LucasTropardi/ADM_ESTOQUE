@@ -1,0 +1,240 @@
+unit U_recebimento_venda;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Mask,
+  Vcl.DBCtrls, Vcl.Buttons;
+
+type
+  TFrm_recebimento_venda = class(TForm)
+    rg_forma_pgto: TRadioGroup;
+    db_id_forma_pgto: TDBEdit;
+    db_descricao: TDBEdit;
+    db_parcela: TDBEdit;
+    db_valor: TDBEdit;
+    db_valor_pago: TDBEdit;
+    db_valor_troco: TDBEdit;
+    Panel1: TPanel;
+    Label6: TLabel;
+    Label8: TLabel;
+    Label5: TLabel;
+    Label9: TLabel;
+    Label1: TLabel;
+    btn_ok: TBitBtn;
+    procedure rg_forma_pgtoClick(Sender: TObject);
+    procedure db_valor_pagoExit(Sender: TObject);
+    procedure btn_okClick(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frm_recebimento_venda: TFrm_recebimento_venda;
+
+implementation
+
+{$R *.dfm}
+
+uses U_venda;
+
+procedure TFrm_recebimento_venda.btn_okClick(Sender: TObject);
+var parcela : Integer;
+    diferenca, soma : Real;
+begin
+  //insere contas a receber
+  Frm_venda.Q_padrao.Refresh;
+  Frm_venda.Q_conta_receber.Open;
+  parcela := 1;
+
+  if (Frm_venda.Q_padraoID_FORMA_PGTO.value = 1) or (Frm_venda.Q_padraoID_FORMA_PGTO.Value= 2) then
+  begin
+    while parcela <= Frm_venda.Q_padraoPARCELA.AsInteger do
+    begin
+      Frm_venda.Q_conta_receber.Insert;
+      Frm_venda.Q_conta_receberID_SEQUENCIA.AsInteger := parcela;
+      Frm_venda.Q_conta_receber.FieldByName('valor_parcela').AsFloat :=
+      Frm_venda.Q_padraoVALOR.AsFloat;
+      Frm_venda.Q_conta_receber.FieldByName('dt_vencimento').Value :=date;
+      Frm_venda.Q_conta_receber.FieldByName('dt_pagamento').Value :=date;
+      Frm_venda.Q_conta_receber.FieldByName('atraso').AsFloat := 0;
+      //Frm_venda.Q_conta_receber.FieldByName('juros').AsFloat := 0;
+      Frm_venda.Q_conta_receber.FieldByName('vl_juros').AsFloat := 0;
+      Frm_venda.Q_conta_receber.FieldByName('total_pagar').AsFloat :=
+      Frm_venda.Q_conta_receber.FieldByName('valor_parcela').AsFloat;
+      Frm_venda.Q_conta_receber.FieldByName('STATUS').AsString := 'RECEBIDO';
+      Frm_venda.Q_conta_receber.Post;
+      Messagedlg('Parcela gerada com sucesso!',mtInformation,[mbOk],0);
+      Frm_venda.btn_imprimir.Click;
+      Frm_recebimento_venda.Close;
+      abort;
+    end;
+  end
+  else
+  if (Frm_venda.Q_padraoID_FORMA_PGTO.value = 3) then
+  begin
+  Frm_venda.Q_conta_receber.First;
+  while parcela <= Frm_venda.Q_padraoPARCELA.AsInteger do
+    begin
+      Frm_venda.Q_conta_receber.Insert;
+      Frm_venda.Q_conta_receberID_SEQUENCIA.AsInteger := parcela;
+      Frm_venda.Q_conta_receber.FieldByName('valor_parcela').AsFloat :=
+      Frm_venda.Q_padraoVALOR.AsFloat / Frm_venda.Q_padraoPARCELA.Value;
+      Frm_venda.Q_conta_receber.FieldByName('dt_vencimento').Value :=date + (parcela * 30);
+      Frm_venda.Q_conta_receber.FieldByName('dt_pagamento').Value :=date + 1;
+      Frm_venda.Q_conta_receber.FieldByName('atraso').AsFloat := 0;
+      //Frm_venda.Q_conta_receber.FieldByName('juros').AsFloat := 0;
+      Frm_venda.Q_conta_receber.FieldByName('vl_juros').AsFloat := 0;
+      Frm_venda.Q_conta_receber.FieldByName('valor_parcela').AsFloat;
+      Frm_venda.Q_conta_receber.FieldByName('total_pagar').AsFloat :=
+      Frm_venda.Q_conta_receber.FieldByName('valor_parcela').AsFloat;
+      Frm_venda.Q_conta_receber.FieldByName('STATUS').AsString := 'RECEBIDO';
+      Frm_venda.Q_conta_receber.Post;
+      inc(parcela);
+      Frm_venda.Q_conta_receber.Next;
+      Messagedlg('Parcelas geradas com sucesso!',mtInformation,[mbOk],0);
+      Frm_venda.btn_imprimir.Click;
+      Frm_recebimento_venda.Close;
+      Abort;
+    end;
+  end
+  else
+  if (Frm_venda.Q_padraoID_FORMA_PGTO.value = 4) then
+   begin
+      Frm_venda.Q_conta_receber.First;
+    while parcela <= Frm_venda.Q_padraoPARCELA.AsInteger do
+      begin
+        Frm_venda.Q_conta_receber.Insert;
+        Frm_venda.Q_conta_receberID_SEQUENCIA.AsInteger := parcela;
+        Frm_venda.Q_conta_receber.FieldByName('valor_parcela').AsFloat :=
+        Frm_venda.Q_padraoVALOR.AsFloat / Frm_venda.Q_padraoPARCELA.Value;
+        Frm_venda.Q_conta_receber.FieldByName('dt_vencimento').Value :=date + (parcela * 30);
+        //Frm_venda.Q_conta_pagar.FieldByName('dt_pagamento').Value :=date;
+        Frm_venda.Q_conta_receber.FieldByName('atraso').AsFloat := 0;
+        //Frm_venda.Q_conta_receber.FieldByName('juros').AsFloat := 0;
+        Frm_venda.Q_conta_receber.FieldByName('vl_juros').AsFloat := 0;
+        Frm_venda.Q_conta_receber.FieldByName('valor_parcela').AsFloat;
+        Frm_venda.Q_conta_receber.FieldByName('total_pagar').AsFloat :=
+        Frm_venda.Q_conta_receber.FieldByName('valor_parcela').AsFloat;
+        Frm_venda.Q_conta_receber.FieldByName('STATUS').AsString := 'EM ABERTO';
+        Frm_venda.Q_conta_receber.Post;
+        inc(parcela);
+        Frm_venda.Q_conta_receber.Next;
+        Messagedlg('Parcelas geradas com sucesso!',mtInformation,[mbOk],0);
+        Frm_venda.btn_imprimir.Click;
+        Frm_recebimento_venda.Close;
+      end;
+   end;
+   if (Frm_venda.Q_padraoID_FORMA_PGTO.value = 5) then
+   begin
+    Frm_venda.Q_conta_receber.First;
+    while parcela <= Frm_venda.Q_padraoPARCELA.AsInteger do
+      begin
+        Frm_venda.Q_conta_receber.Insert;
+        Frm_venda.Q_conta_receberID_SEQUENCIA.AsInteger := parcela;
+        Frm_venda.Q_conta_receber.FieldByName('valor_parcela').AsFloat :=
+        Frm_venda.Q_padraoVALOR.AsFloat / Frm_venda.Q_padraoPARCELA.Value;
+        Frm_venda.Q_conta_receber.FieldByName('dt_vencimento').Value :=date + (parcela * 30);
+        //Frm_venda.Q_conta_pagar.FieldByName('dt_pagamento').Value :=date;
+        Frm_venda.Q_conta_receber.FieldByName('atraso').AsFloat := 0;
+        //Frm_venda.Q_conta_receber.FieldByName('juros').AsFloat := 0;
+        Frm_venda.Q_conta_receber.FieldByName('vl_juros').AsFloat := 0;
+        Frm_venda.Q_conta_receber.FieldByName('valor_parcela').AsFloat;
+        Frm_venda.Q_conta_receber.FieldByName('total_pagar').AsFloat :=
+        Frm_venda.Q_conta_receber.FieldByName('valor_parcela').AsFloat;
+        Frm_venda.Q_conta_receber.FieldByName('STATUS').AsString := 'EM ABERTO';
+        Frm_venda.Q_conta_receber.Post;
+        inc(parcela);
+        Frm_venda.Q_conta_receber.Next;
+        Messagedlg('Parcelas geradas com sucesso!',mtInformation,[mbOk],0);
+        Frm_venda.btn_imprimir.Click;
+        Frm_recebimento_venda.Close;
+      end;
+   end;
+
+    //PROCEDURE PARA TRATAR A DIFERENÇA DE PARCELA
+    soma := soma + Frm_venda.Q_padraoPARCELA.Value * Frm_venda.Q_conta_receber.FieldByName('valor_parcela').Asfloat;
+    if soma > Frm_venda.Q_padraoVALOR.Asfloat then
+    begin
+      diferenca := soma - Frm_venda.Q_padraoVALOR.AsFloat;
+      Frm_venda.Q_conta_receber.Last;
+      Frm_venda.Q_conta_receber.Edit;
+      Frm_venda.Q_conta_receber.FieldByName('valor_parcela').Asfloat :=
+      Frm_venda.Q_conta_receber.FieldByName('valor_parcela').AsFloat - diferenca;
+      Frm_venda.Q_conta_receber.Refresh
+    end;
+
+    Messagedlg('Parcelas geradas com sucesso!', mtInformation,[mbOk],0);
+end;
+
+procedure TFrm_recebimento_venda.db_valor_pagoExit(Sender: TObject);
+begin
+  //volta o troco
+  Frm_venda.Q_padraoTROCO.AsFLoat :=
+  Frm_venda.Q_padraoDINHEIRO.AsFloat - Frm_venda.Q_padraoVALOR.AsFloat;
+end;
+
+procedure TFrm_recebimento_venda.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  //Faz a função do TAB
+  if key = #13 then
+  begin
+    key := #0;
+    Perform(wm_nextdlgCtl,0,0);
+  end;
+end;
+
+procedure TFrm_recebimento_venda.rg_forma_pgtoClick(Sender: TObject);
+begin
+  Frm_venda.Q_padrao.Edit;
+  case rg_forma_pgto.ItemIndex of
+    0:begin
+      //venda a vista
+      Frm_venda.Q_padraoID_FORMA_PGTO.AsInteger := 1;
+      Frm_venda.Q_padraoPARCELA.AsInteger := 1;
+      db_valor_pago.SetFocus;
+    end;
+
+    1:begin
+      //venda debito / pix
+      Frm_venda.Q_padraoID_FORMA_PGTO.AsInteger := 2;
+      Frm_venda.Q_padraoPARCELA.AsInteger := 1;
+      Frm_venda.Q_padraoDINHEIRO.AsFloat :=
+      Frm_venda.Q_padraoVALOR.AsFloat;
+      Frm_venda.Q_padraoTROCO.AsFloat := 0;
+    end;
+
+    2:begin
+      //venda crédito
+      Frm_venda.Q_padraoID_FORMA_PGTO.AsInteger := 3;
+      db_parcela.SetFocus;
+      Frm_venda.Q_padraoDINHEIRO.AsFloat :=
+      Frm_venda.Q_padraoVALOR.AsFloat;
+      Frm_venda.Q_padraoTROCO.AsFloat := 0;
+    end;
+
+    3:begin
+      //venda cheque
+      Frm_venda.Q_padraoID_FORMA_PGTO.AsInteger := 4;
+      db_parcela.SetFocus;
+      Frm_venda.Q_padraoDINHEIRO.AsFloat :=
+      Frm_venda.Q_padraoVALOR.AsFloat;
+      Frm_venda.Q_padraoTROCO.AsFloat := 0;
+    end;
+
+    4:begin
+      //venda crediário
+      Frm_venda.Q_padraoID_FORMA_PGTO.AsInteger := 5;
+      db_parcela.SetFocus;
+      Frm_venda.Q_padraoDINHEIRO.AsFloat := 0;
+      Frm_venda.Q_padraoTROCO.AsFloat := 0;
+    end;
+
+  end;
+end;
+
+end.

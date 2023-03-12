@@ -1,0 +1,24 @@
+unit U_altera_preco;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs;
+
+type
+  TFrm_movimenta_precos = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frm_movimenta_precos: TFrm_movimenta_precos;
+
+implementation
+
+{$R *.dfm}
+
+end.

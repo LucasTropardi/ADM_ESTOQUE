@@ -1,0 +1,18 @@
+/* cria a procedure para amentar o valor de venda DE TODOS os produtos */
+SET TERM ^ ;
+CREATE PROCEDURE P_AUMENTA_VALOR_GERAL (
+    P_PORCENTAGEM Float )
+AS
+BEGIN
+  /* ATUALIZA O VALOR DE VENDA GERAL*/ 
+  UPDATE PRODUTO
+  SET PRODUTO.VL_VENDA=PRODUTO.VL_VENDA + ((PRODUTO.VL_VENDA * :P_PORCENTAGEM)/100);
+END^
+SET TERM ; ^
+
+
+
+
+
+
+

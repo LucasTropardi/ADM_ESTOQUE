@@ -1,0 +1,100 @@
+inherited Frm_pesq_cliente: TFrm_pesq_cliente
+  Caption = 'PESQUISA CLIENTE'
+  ClientWidth = 1109
+  ExplicitWidth = 1125
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited Panel1: TPanel
+    Width = 1109
+    ExplicitWidth = 1109
+  end
+  inherited Panel2: TPanel
+    Width = 1109
+    ExplicitWidth = 1109
+  end
+  inherited btn_pesquisar: TBitBtn
+    OnClick = btn_pesquisarClick
+  end
+  inherited btn_transferir: TBitBtn
+    OnClick = btn_transferirClick
+  end
+  inherited DBGrid1: TDBGrid
+    Width = 1109
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'ID_CLIENTE'
+        Width = 30
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NOME'
+        Width = 200
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'ENDERECO'
+        Width = 250
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'NUMERO'
+        Width = 30
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'BAIRRO'
+        Width = 170
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CIDADE'
+        Width = 120
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'UF'
+        Width = 20
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CEP'
+        Width = 70
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'TELEFONE'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CPF'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'CADASTRO'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'EMAIL'
+        Width = 200
+        Visible = True
+      end>
+  end
+  inherited Q_pesq_padrao: TFDQuery
+    SQL.Strings = (
+      'SELECT *'
+      'FROM CLIENTE'
+      'ORDER BY ID_CLIENTE;')
+  end
+end

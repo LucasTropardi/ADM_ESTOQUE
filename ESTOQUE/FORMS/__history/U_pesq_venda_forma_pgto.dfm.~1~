@@ -1,0 +1,62 @@
+inherited Frm_pesq_venda_forma_pgto: TFrm_pesq_venda_forma_pgto
+  Caption = 'PESQUISA VENDAS POR FORMA DE PAGAMENTO'
+  ExplicitWidth = 1000
+  ExplicitHeight = 539
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited Panel1: TPanel
+    inherited Label1: TLabel
+      Visible = False
+    end
+    inherited lb_nome: TLabel
+      Visible = False
+    end
+    inherited lb_inicio: TLabel
+      Left = 8
+      ExplicitLeft = 8
+    end
+    inherited lb_fim: TLabel
+      Left = 135
+      ExplicitLeft = 135
+    end
+    inherited cb_chave_pesquisa: TComboBox
+      Visible = False
+    end
+    inherited ed_nome: TEdit
+      Visible = False
+    end
+    inherited mk_inicio: TMaskEdit
+      Left = 8
+      ExplicitLeft = 8
+    end
+    inherited mk_fim: TMaskEdit
+      Left = 135
+      ExplicitLeft = 135
+    end
+  end
+  inherited Panel2: TPanel
+    inherited DBNavigator1: TDBNavigator
+      Hints.Strings = ()
+    end
+  end
+  inherited btn_pesquisar: TBitBtn
+    Left = 407
+    Top = 19
+    ExplicitLeft = 407
+    ExplicitTop = 19
+  end
+  inherited btn_transferir: TBitBtn
+    Visible = False
+  end
+  inherited btn_imprimir: TBitBtn
+    Left = 523
+    Top = 19
+    ExplicitLeft = 523
+    ExplicitTop = 19
+  end
+  inherited Rel_pesq_padrao: TfrxReport
+    Datasets = <>
+    Variables = <>
+    Style = <>
+  end
+end

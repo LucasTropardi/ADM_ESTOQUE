@@ -1,0 +1,98 @@
+unit U_conta_pagar;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, U_padrao, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.DBCtrls, Vcl.StdCtrls,
+  Vcl.Buttons, Vcl.ExtCtrls, Vcl.Mask;
+
+type
+  TFrm_conta_pagar = class(TFrm_padrao)
+    Q_padraoID_COMPRA: TIntegerField;
+    Q_padraoID_FORNECEDOR: TIntegerField;
+    Q_padraoNOME: TStringField;
+    Q_padraoCNPJ: TStringField;
+    Q_padraoID_SEQUENCIA: TIntegerField;
+    Q_padraoVALOR_PARCELA: TFMTBCDField;
+    Q_padraoDT_VENCIMENTO: TDateField;
+    Q_padraoDT_PAGAMENTO: TDateField;
+    Q_padraoATRASO: TIntegerField;
+    Q_padraoJUROS: TFMTBCDField;
+    Q_padraoVL_JUROS: TFMTBCDField;
+    Q_padraoTOTAL_PAGAR: TFMTBCDField;
+    Q_padraoSTATUS: TStringField;
+    Label1: TLabel;
+    DBEdit1: TDBEdit;
+    Label2: TLabel;
+    DBEdit2: TDBEdit;
+    Label3: TLabel;
+    DBEdit3: TDBEdit;
+    Label4: TLabel;
+    DBEdit4: TDBEdit;
+    Label5: TLabel;
+    DBEdit5: TDBEdit;
+    Label6: TLabel;
+    DBEdit6: TDBEdit;
+    Label7: TLabel;
+    DBEdit7: TDBEdit;
+    Label8: TLabel;
+    DBEdit8: TDBEdit;
+    Label9: TLabel;
+    DBEdit9: TDBEdit;
+    Label10: TLabel;
+    DBEdit10: TDBEdit;
+    Label11: TLabel;
+    DBEdit11: TDBEdit;
+    Label12: TLabel;
+    DBEdit12: TDBEdit;
+    Label13: TLabel;
+    DBEdit13: TDBEdit;
+    Bevel1: TBevel;
+    Bevel2: TBevel;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure btn_editarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frm_conta_pagar: TFrm_conta_pagar;
+
+implementation
+
+{$R *.dfm}
+
+uses U_pesq_parcela_pagar;
+
+procedure TFrm_conta_pagar.BitBtn1Click(Sender: TObject);
+begin
+  Frm_pesq_parcela_pagar := TFrm_pesq_parcela_pagar.Create(Self);
+  Frm_pesq_parcela_pagar.ShowModal;
+  try
+    if Frm_pesq_parcela_pagar.codigo > 0 then
+      begin
+      Q_padrao.Open;
+      Q_padrao.Locate('ID_SEQUENCIA',Frm_pesq_parcela_pagar.codigo,[]);
+      Q_padrao.Locate('DT_VENCIMENTO',Frm_pesq_parcela_pagar.data,[]);
+      end;
+  finally
+    Frm_pesq_parcela_pagar.Free;
+    Frm_pesq_parcela_pagar:=Nil;
+  end;
+
+end;
+
+procedure TFrm_conta_pagar.btn_editarClick(Sender: TObject);
+begin
+  inherited;
+  Q_padrao.Edit;
+  dbedit9.SetFocus;
+end;
+
+end.

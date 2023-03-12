@@ -1,0 +1,94 @@
+unit U_fornecedor;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, U_padrao, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.DBCtrls, Vcl.StdCtrls,
+  Vcl.Buttons, Vcl.ExtCtrls, Vcl.Mask;
+
+type
+  TFrm_fornecedor = class(TFrm_padrao)
+    Q_padraoID_FORNECEDOR: TFDAutoIncField;
+    Q_padraoNOME: TStringField;
+    Q_padraoENDERECO: TStringField;
+    Q_padraoNUMERO: TIntegerField;
+    Q_padraoBAIRRO: TStringField;
+    Q_padraoCIDADE: TStringField;
+    Q_padraoUF: TStringField;
+    Q_padraoCEP: TStringField;
+    Q_padraoTELEFONE: TStringField;
+    Q_padraoCNPJ: TStringField;
+    Q_padraoEMAIL: TStringField;
+    Q_padraoCADASTRO: TDateField;
+    Label1: TLabel;
+    db_id_fornecedor: TDBEdit;
+    Label2: TLabel;
+    db_nome: TDBEdit;
+    Label3: TLabel;
+    db_endereco: TDBEdit;
+    Label4: TLabel;
+    db_numero: TDBEdit;
+    Label5: TLabel;
+    db_bairro: TDBEdit;
+    Label6: TLabel;
+    db_cidade: TDBEdit;
+    Label7: TLabel;
+    db_uf: TDBEdit;
+    Label8: TLabel;
+    db_cep: TDBEdit;
+    Label9: TLabel;
+    db_telefone: TDBEdit;
+    Label10: TLabel;
+    db_cnpj: TDBEdit;
+    Label11: TLabel;
+    db_email: TDBEdit;
+    Label12: TLabel;
+    db_cadastro: TDBEdit;
+    procedure btn_novoClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure Abre_Tela_Pesquisa_Fornecedor();
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frm_fornecedor: TFrm_fornecedor;
+
+implementation
+
+{$R *.dfm}
+
+uses U_pesq_fornecedor;
+
+procedure TFrm_fornecedor.Abre_Tela_Pesquisa_Fornecedor;
+begin
+  Frm_pesq_fornecedor := Tfrm_pesq_fornecedor.Create(Self);
+  Frm_pesq_fornecedor.ShowModal;
+  try
+
+  finally
+    Frm_pesq_fornecedor.Free;
+    Frm_pesq_fornecedor := nil;
+  end;
+end;
+
+procedure TFrm_fornecedor.BitBtn1Click(Sender: TObject);
+begin
+  inherited;
+  Abre_Tela_Pesquisa_Fornecedor;
+end;
+
+procedure TFrm_fornecedor.btn_novoClick(Sender: TObject);
+begin
+  inherited;
+  db_cadastro.Text := DateToStr(now);
+  db_nome.SetFocus;
+end;
+
+end.

@@ -1,0 +1,25 @@
+unit U_recebimento_venda;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls;
+
+type
+  TFrm_recebimento_venda = class(TForm)
+    Panel1: TPanel;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frm_recebimento_venda: TFrm_recebimento_venda;
+
+implementation
+
+{$R *.dfm}
+
+end.

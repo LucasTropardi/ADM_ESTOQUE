@@ -1,0 +1,97 @@
+unit U_cliente;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, U_padrao, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.DBCtrls, Vcl.StdCtrls,
+  Vcl.Buttons, Vcl.ExtCtrls, Vcl.Mask;
+
+type
+  TFrm_cliente = class(TFrm_padrao)
+    Q_padraoID_CLIENTE: TFDAutoIncField;
+    Q_padraoNOME: TStringField;
+    Q_padraoENDERECO: TStringField;
+    Q_padraoNUMERO: TIntegerField;
+    Q_padraoBAIRRO: TStringField;
+    Q_padraoCIDADE: TStringField;
+    Q_padraoUF: TStringField;
+    Q_padraoCEP: TStringField;
+    Q_padraoTELEFONE: TStringField;
+    Q_padraoCPF: TStringField;
+    Q_padraoEMAIL: TStringField;
+    Q_padraoCADASTRO: TDateField;
+    Label1: TLabel;
+    db_id_cliente: TDBEdit;
+    Label2: TLabel;
+    db_nome: TDBEdit;
+    Label3: TLabel;
+    db_endereco: TDBEdit;
+    Label4: TLabel;
+    db_numero: TDBEdit;
+    Label5: TLabel;
+    db_bairro: TDBEdit;
+    Label6: TLabel;
+    db_cidade: TDBEdit;
+    Label7: TLabel;
+    db_uf: TDBEdit;
+    Label8: TLabel;
+    db_cep: TDBEdit;
+    Label9: TLabel;
+    db_telefone: TDBEdit;
+    Label10: TLabel;
+    db_cpf: TDBEdit;
+    Label12: TLabel;
+    db_cadastro: TDBEdit;
+    Label11: TLabel;
+    db_email: TDBEdit;
+    procedure btn_novoClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure Abre_Tela_Pesquisa_Cliente();
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frm_cliente: TFrm_cliente;
+
+implementation
+
+{$R *.dfm}
+
+uses U_pesq_cliente;
+
+procedure TFrm_cliente.Abre_Tela_Pesquisa_Cliente;
+begin
+  Frm_pesq_cliente := Tfrm_pesq_cliente.Create(Self);
+  Frm_pesq_cliente.ShowModal;
+  try
+    if Frm_pesq_cliente.codigo > 0 then
+    begin
+      Q_padrao.Open;
+      Q_padrao.Locate('ID_CLIENTE',Frm_pesq_cliente.codigo,[]);
+    end;
+  finally
+    Frm_pesq_cliente.Free;
+    Frm_pesq_cliente:=nil;
+  end;
+end;
+
+procedure TFrm_cliente.BitBtn1Click(Sender: TObject);
+begin
+  Abre_Tela_Pesquisa_Cliente;
+end;
+
+procedure TFrm_cliente.btn_novoClick(Sender: TObject);
+begin
+  inherited;
+  db_cadastro.Text := DateToStr(Now);
+  db_nome.SetFocus;
+end;
+
+end.

@@ -1,0 +1,93 @@
+inherited Frm_forma_pgto: TFrm_forma_pgto
+  Caption = 'CADASTRO DE FORMAS DE PAGAMENTO'
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel [0]
+    Left = 80
+    Top = 128
+    Width = 86
+    Height = 13
+    Caption = 'ID_FORMA_PGTO'
+    FocusControl = db_id_forma_pgto
+  end
+  object Label2: TLabel [1]
+    Left = 80
+    Top = 184
+    Width = 59
+    Height = 13
+    Caption = 'DESCRICAO'
+    FocusControl = db_descricao
+  end
+  object Label3: TLabel [2]
+    Left = 248
+    Top = 128
+    Width = 55
+    Height = 13
+    Caption = 'CADASTRO'
+    FocusControl = db_cadastro
+  end
+  inherited Panel1: TPanel
+    OnClick = Panel1Click
+  end
+  inherited DBNavigator1: TDBNavigator
+    Hints.Strings = ()
+  end
+  object db_id_forma_pgto: TDBEdit [8]
+    Left = 80
+    Top = 144
+    Width = 134
+    Height = 21
+    DataField = 'ID_FORMA_PGTO'
+    DataSource = ds_padrao
+    TabOrder = 5
+  end
+  object db_descricao: TDBEdit [9]
+    Left = 80
+    Top = 200
+    Width = 600
+    Height = 21
+    DataField = 'DESCRICAO'
+    DataSource = ds_padrao
+    TabOrder = 6
+  end
+  object db_cadastro: TDBEdit [10]
+    Left = 248
+    Top = 144
+    Width = 134
+    Height = 21
+    DataField = 'CADASTRO'
+    DataSource = ds_padrao
+    Enabled = False
+    TabOrder = 7
+  end
+  inherited Q_padrao: TFDQuery
+    UpdateOptions.AssignedValues = [uvFetchGeneratorsPoint, uvGeneratorName]
+    UpdateOptions.FetchGeneratorsPoint = gpImmediate
+    UpdateOptions.GeneratorName = 'GEN_ID_FORMA_PGTO'
+    UpdateOptions.AutoIncFields = 'ID_FORMA_PGTO'
+    SQL.Strings = (
+      'SELECT'
+      '     ID_FORMA_PGTO,'
+      '     DESCRICAO,'
+      '     CADASTRO'
+      'FROM FORMA_PGTO'
+      'ORDER BY ID_FORMA_PGTO;')
+    object Q_padraoID_FORMA_PGTO: TIntegerField
+      FieldName = 'ID_FORMA_PGTO'
+      Origin = 'ID_FORMA_PGTO'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object Q_padraoDESCRICAO: TStringField
+      FieldName = 'DESCRICAO'
+      Origin = 'DESCRICAO'
+      Required = True
+      Size = 100
+    end
+    object Q_padraoCADASTRO: TDateField
+      FieldName = 'CADASTRO'
+      Origin = 'CADASTRO'
+      Required = True
+    end
+  end
+end

@@ -1,0 +1,513 @@
+unit U_compra01;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, U_movimento_padrao, Data.DB,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  Vcl.Grids, Vcl.DBGrids, Vcl.DBCtrls, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls,
+  Vcl.Mask, frxClass, frxDBSet, Vcl.ComCtrls,DateUtils;
+
+type
+  TFrm_compra01 = class(TFrm_padrao_movimento)
+    Q_padraoID_COMPRA: TFDAutoIncField;
+    Q_padraoID_FORNECEDOR: TIntegerField;
+    Q_padraoID_FORMA_PGTO: TIntegerField;
+    Q_padraoUSUARIO: TStringField;
+    Q_padraoCADASTRO: TDateField;
+    Q_padraoVALOR: TFMTBCDField;
+    Label1: TLabel;
+    db_id_compra: TDBEdit;
+    Label2: TLabel;
+    db_id_fornecedor: TDBEdit;
+    Label3: TLabel;
+    db_id_forma_pgto: TDBEdit;
+    Label4: TLabel;
+    db_cadastro: TDBEdit;
+    Label5: TLabel;
+    db_usuario: TDBEdit;
+    Label6: TLabel;
+    db_valor: TDBEdit;
+    Q_fornecedor: TFDQuery;
+    Q_forma_pgto: TFDQuery;
+    ds_fornecedor: TDataSource;
+    ds_forma_pgto: TDataSource;
+    Q_fornecedorID_FORNECEDOR: TIntegerField;
+    Q_fornecedorNOME: TStringField;
+    Q_forma_pgtoID_FORMA_PGTO: TIntegerField;
+    Q_forma_pgtoDESCRICAO: TStringField;
+    Q_padraoNOME: TStringField;
+    Q_padraoDESCRICAO: TStringField;
+    Label7: TLabel;
+    Label8: TLabel;
+    db_nome: TDBLookupComboBox;
+    db_descricao: TDBLookupComboBox;
+    Q_padrao_itemID_SEQUENCIA: TIntegerField;
+    Q_padrao_itemID_COMPRA: TIntegerField;
+    Q_padrao_itemID_PRODUTO: TIntegerField;
+    Q_padrao_itemQTDE: TFMTBCDField;
+    Q_padrao_itemVL_CUSTO: TFMTBCDField;
+    Q_padrao_itemTOTAL_ITEM: TFMTBCDField;
+    Label9: TLabel;
+    db_id_produto: TDBEdit;
+    Label10: TLabel;
+    db_qtde: TDBEdit;
+    DBEdit3: TDBEdit;
+    Label12: TLabel;
+    db_total_item: TDBEdit;
+    Q_padrao_itemDESCONTO: TFMTBCDField;
+    Label11: TLabel;
+    dv_vl_custo: TDBEdit;
+    Label13: TLabel;
+    db_desconto: TDBEdit;
+    Q_produto: TFDQuery;
+    Q_padrao_itemSUBTOTAL: TAggregateField;
+    db_subtotal: TDBEdit;
+    Q_padrao_itemDESCRICAO: TStringField;
+    Label14: TLabel;
+    Rel_recibo_compra: TfrxReport;
+    frxDBD_Q_padrao: TfrxDBDataset;
+    Fd_empresa: TFDQuery;
+    ds_empresa: TDataSource;
+    Fd_empresaID_EMPRESA: TIntegerField;
+    Fd_empresaRAZAO_SOCIAL: TStringField;
+    Fd_empresaN_FANTASIA: TStringField;
+    Fd_empresaENDERECO: TStringField;
+    Fd_empresaNUMERO: TIntegerField;
+    Fd_empresaBAIRRO: TStringField;
+    Fd_empresaCIDADE: TStringField;
+    Fd_empresaUF: TStringField;
+    Fd_empresaCEP: TStringField;
+    Fd_empresaTELEFONE: TStringField;
+    Fd_empresaCNPJ: TStringField;
+    Fd_empresaEMAIL: TStringField;
+    Fd_empresaLOGO: TBlobField;
+    Fd_empresaCADASTRO: TDateField;
+    frxDBD_empresa: TfrxDBDataset;
+    frxDBD_padrao_item: TfrxDBDataset;
+    frxDBD_recibo_compra: TfrxDBDataset;
+    Q_padraoCOND_PGTO: TIntegerField;
+    Label15: TLabel;
+    db_cond_pgto: TDBEdit;
+    Q_conta_pagar: TFDQuery;
+    ds_conta_pagar: TDataSource;
+    Q_conta_pagarID_SEQUENCIA: TIntegerField;
+    Q_conta_pagarID_COMPRA: TIntegerField;
+    Q_conta_pagarVALOR_PARCELA: TFMTBCDField;
+    Q_conta_pagarDT_VENCIMENTO: TDateField;
+    Q_conta_pagarDT_PAGAMENTO: TDateField;
+    Q_conta_pagarATRASO: TIntegerField;
+    Q_conta_pagarJUROS: TFMTBCDField;
+    Q_conta_pagarVL_JUROS: TFMTBCDField;
+    Q_conta_pagarTOTAL_PAGAR: TFMTBCDField;
+    Q_conta_pagarSTATUS: TStringField;
+    Q_produtoID_PRODUTO: TIntegerField;
+    Q_produtoPRODUTO_DESCRICAO: TStringField;
+    Q_produtoESTOQUE: TFMTBCDField;
+    Q_produtoESTOQUE_MIN: TFMTBCDField;
+    Q_produtoVL_CUSTO: TFMTBCDField;
+    btn_check_fornecedor: TSpeedButton;
+    btn_busca_forma_pgto: TSpeedButton;
+    procedure btn_novoClick(Sender: TObject);
+    procedure btn_itemClick(Sender: TObject);
+    procedure db_id_produtoExit(Sender: TObject);
+    procedure btn_okClick(Sender: TObject);
+    procedure btn_excluirClick(Sender: TObject);
+    procedure btn_deletarClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure btn_imprimirClick(Sender: TObject);
+    procedure db_id_forma_pgtoExit(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure db_descontoClick(Sender: TObject);
+    procedure db_descontoExit(Sender: TObject);
+    procedure db_qtdeExit(Sender: TObject);
+    procedure db_qtdeClick(Sender: TObject);
+    procedure btn_check_fornecedorClick(Sender: TObject);
+    procedure btn_busca_forma_pgtoClick(Sender: TObject);
+    procedure btn_gravarClick(Sender: TObject);
+    procedure db_cond_pgtoExit(Sender: TObject);
+    procedure db_total_itemExit(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frm_compra01: TFrm_compra01;
+
+implementation
+
+{$R *.dfm}
+
+uses U_DM, U_pesq_compra, U_pesq_cliente, U_pesq_fornecedor, U_pesq_forma_pgto;
+
+procedure TFrm_compra01.BitBtn1Click(Sender: TObject);
+begin   //Botão pesquisar
+  inherited;
+  Frm_pesq_compra := Tfrm_pesq_compra.Create(Self);
+  Frm_pesq_compra.ShowModal;
+  try
+   if Frm_pesq_compra.codigo > 0 then
+      begin
+      Q_padrao.Open;
+      Q_padrao.Locate('ID_COMPRA',Frm_pesq_compra.codigo,[]);
+      end;
+  finally
+    Frm_pesq_compra.Free;
+    Frm_pesq_compra:=nil;
+  end;
+end;
+
+procedure TFrm_compra01.btn_busca_forma_pgtoClick(Sender: TObject);
+begin
+  //inherited;
+  if Q_padrao.State in [dsedit,dsinsert] then
+  begin
+    Frm_pesq_forma_pgto := Tfrm_pesq_forma_pgto.Create(Self);
+    Frm_pesq_forma_pgto.ShowModal;
+    try
+      if Frm_pesq_forma_pgto.codigo > 0 then
+      begin
+
+        Q_padraoID_FORMA_PGTO.AsInteger := Frm_pesq_forma_pgto.codigo;
+      end;
+    finally
+      Frm_pesq_forma_pgto.Free;
+      Frm_pesq_forma_pgto := Nil;
+    end;
+  end;
+end;
+
+procedure TFrm_compra01.btn_check_fornecedorClick(Sender: TObject);
+begin
+  //inherited;
+  if Q_padrao.State in [dsedit,dsinsert] then
+  begin
+    Frm_pesq_fornecedor := Tfrm_pesq_fornecedor.Create(Self);
+    Frm_pesq_fornecedor.ShowModal;
+    try
+      if Frm_pesq_fornecedor.codigo > 0 then
+      begin
+
+        Q_padraoID_FORNECEDOR.AsInteger := Frm_pesq_fornecedor.codigo;
+      end;
+    finally
+      Frm_pesq_fornecedor.Free;
+      Frm_pesq_fornecedor := Nil;
+    end;
+  end;
+end;
+
+procedure TFrm_compra01.btn_deletarClick(Sender: TObject);
+begin
+  if messagedlg('Deseja excluir este registro de compra?',mtConfirmation,[mbOk,mbNo],0) = mrOk then
+  begin
+    //exclui parcelas
+    Q_conta_pagar.Open;
+    Q_conta_pagar.First;
+    while not Q_conta_pagar.eof do
+    begin
+      Q_conta_pagar.Delete;
+      Q_conta_pagar.Next;
+    end;
+    // Exclui itens de compra
+    Q_padrao_item.First;
+    while Q_padrao_item.RecordCount > 0 do
+    begin
+      if Q_produto.Locate('ID_PRODUTO', Q_padrao_itemID_PRODUTO.AsInteger,[]) then
+      begin
+        Q_produto.Edit;
+        Q_produto.FieldByName('ESTOQUE').AsFloat :=
+        Q_produto.FieldByName('ESTOQUE').AsFloat -
+        Q_padrao_itemQTDE.AsFloat;
+        Q_produto.Refresh;
+        Q_padrao_item.Delete;
+        Q_padrao_item.Next;
+      end;
+    end;
+    //excluir cabeçalho
+    inherited;
+    Q_conta_pagar.Close;
+  end
+  else
+  Abort;
+end;
+
+procedure TFrm_compra01.btn_excluirClick(Sender: TObject);
+begin
+  //exclui item do detalhamento de compra
+  if messagedlg('Deseja excluir este item?',mtConfirmation,[mbOk,mbNo],0) = mrOk then
+  begin
+    if Q_produto.Locate('ID_PRODUTO', Q_padrao_itemID_PRODUTO.AsInteger,[]) then
+    begin
+      Q_produto.Edit;
+      Q_produto.FieldByName('ESTOQUE').AsFloat :=
+      Q_produto.FieldByName('ESTOQUE').AsFloat -
+      Q_padrao_itemQTDE.AsFloat;
+      Q_produto.Refresh;
+      Q_padrao_item.Delete;
+      Messagedlg('Item excluído com sucesso',mtInformation,[mbOk],0);
+    end;
+  end
+  else
+  Abort;
+
+end;
+
+procedure TFrm_compra01.btn_gravarClick(Sender: TObject);
+begin
+  inherited;
+  Q_padrao.Refresh;
+  btn_item.Click;
+end;
+
+procedure TFrm_compra01.btn_imprimirClick(Sender: TObject);
+  //Imprime o Recibo de compra
+var caminho : String;
+    compra : Integer;
+begin
+  compra := Q_padrao_itemID_COMPRA.AsInteger;
+  Q_padrao.Close;
+  Q_padrao_item.Close;
+  Q_padrao.SQL.Add('');
+  Q_padrao.Params.Clear;
+  Q_padrao.SQL.Clear;
+  Q_padrao.SQL.Add('SELECT A.ID_COMPRA,A.ID_FORNECEDOR,B.NOME,A.ID_FORMA_PGTO,A.COND_PGTO,C.DESCRICAO,A.USUARIO,A.VALOR,A.CADASTRO'
+  +' FROM COMPRA A inner join FORNECEDOR B on B.ID_FORNECEDOR = A.ID_FORNECEDOR'
+  +' inner join FORMA_PGTO C on C.ID_FORMA_PGTO = A.ID_FORMA_PGTO where A.ID_COMPRA = :ID_COMPRA');
+  Q_padrao.Params.ParamByName('ID_COMPRA').AsInteger := compra;
+
+  Q_padrao.Open;
+  Q_padrao_item.Open;
+  Frm_compra01.Close;
+
+  caminho := ExtractFilepath(Application.ExeName);
+  if Frm_compra01.Rel_recibo_compra.LoadFromFile(caminho + 'Rel_recibo_compra.fr3') then
+  begin
+    Rel_recibo_compra.Clear;
+    Rel_recibo_compra.LoadFromFile(extractfilepath(application.ExeName) + 'Rel_recibo_compra.fr3');
+    Rel_recibo_compra.PrepareReport(true);
+    Rel_recibo_compra.ShowPreparedReport;
+  end
+  else
+  Messagedlg('Relatório não encontrado',mtError,[mbOk],0);
+end;
+
+
+procedure TFrm_compra01.btn_itemClick(Sender: TObject);
+var proximo : integer;
+begin
+  //Insere os itens na tabela de item compras
+  Q_padrao_item.Open;
+  Q_padrao_item.Last;
+  proximo := Q_padrao_itemID_SEQUENCIA.AsInteger + 1;
+  Q_padrao_item.Append;
+  Q_padrao_itemID_SEQUENCIA.AsInteger := proximo;
+  db_id_produto.SetFocus;
+end;
+
+procedure TFrm_compra01.btn_novoClick(Sender: TObject);
+begin
+  //Carga na qery e abre uma nova linha
+  inherited;
+  Q_padraoCADASTRO.AsDateTime := Date;
+  Q_padraoUSUARIO.AsString := dm.usuario;
+  Q_padraoVALOR.AsCurrency := 0;
+  db_id_fornecedor.SetFocus;
+end;
+
+procedure TFrm_compra01.btn_okClick(Sender: TObject);
+var parcela : Integer;
+    diferenca, soma : Real;
+begin
+  Q_padrao.Edit;
+  Q_padraoVALOR.AsFloat :=
+  Q_padrao_item.AggFields.FieldByName('SUBTOTAL').Value;
+  Q_padrao.Post;
+  //Alimenta o estoque
+
+  Q_padrao_item.First;
+  while not Q_padrao_item.eof do
+  begin
+    if Q_produto.Locate('ID_PRODUTO',Q_padrao_itemID_PRODUTO.AsInteger,[]) then
+    begin
+      Q_produto.Edit;
+      Q_produto.FieldByName('ESTOQUE').AsFloat :=
+      Q_produto.FieldByName('ESTOQUE').AsFloat +
+      Q_padrao_itemQTDE.AsFloat;
+      Q_padrao_item.Next;
+    end;
+  end;
+  Q_produto.Refresh;
+  Messagedlg('Estoque atualizado com sucesso.',mtinformation,[mbOK],0);
+
+  //Insere o contas a pagar
+  Q_conta_pagar.Open;
+  parcela := 1;
+  if (Q_padraoID_FORMA_PGTO.value = 1) or (Q_padraoID_FORMA_PGTO.Value= 2) then
+  begin
+    while parcela <= Q_padraoCOND_PGTO.AsInteger do
+    begin
+      Q_conta_pagar.Insert;
+      Q_conta_pagarID_SEQUENCIA.AsInteger := parcela;
+      Q_conta_pagar.FieldByName('valor_parcela').AsFloat :=
+      Q_padraoVALOR.AsFloat / Q_padraoCOND_PGTO.Value;
+      Q_conta_pagar.FieldByName('dt_vencimento').Value :=date;
+      Q_conta_pagar.FieldByName('dt_pagamento').Value :=date;
+      Q_conta_pagar.FieldByName('atraso').AsFloat := 0;
+      Q_conta_pagar.FieldByName('juros').AsFloat := 0;
+      Q_conta_pagar.FieldByName('vl_juros').AsFloat := 0;
+      Q_conta_pagar.FieldByName('total_pagar').AsFloat :=
+      Q_conta_pagar.FieldByName('valor_parcela').AsFloat;
+      Q_conta_pagar.FieldByName('STATUS').AsString := 'PAGO';
+      Q_conta_pagar.Post;
+      inc(parcela);
+    end;
+  end
+  else
+  Q_conta_pagar.First;
+  while parcela <= Q_padraoCOND_PGTO.AsInteger do
+    begin
+      Q_conta_pagar.Insert;
+      Q_conta_pagarID_SEQUENCIA.AsInteger := parcela;
+      Q_conta_pagar.FieldByName('valor_parcela').AsFloat :=
+      Q_padraoVALOR.AsFloat / Q_padraoCOND_PGTO.Value;
+      Q_conta_pagarDT_VENCIMENTO.AsDateTime := incMonth(Q_padraoCADASTRO.AsDateTime,parcela);
+      //Q_conta_pagar.FieldByName('dt_vencimento').Value :=date + (parcela * 30);
+      //Q_conta_pagar.FieldByName('dt_pagamento').Value :=date;
+      Q_conta_pagar.FieldByName('atraso').AsFloat := 0;
+      Q_conta_pagar.FieldByName('juros').AsFloat := 0;
+      Q_conta_pagar.FieldByName('vl_juros').AsFloat := 0;
+      Q_conta_pagar.FieldByName('valor_parcela').AsFloat;
+      Q_conta_pagar.FieldByName('total_pagar').AsFloat :=
+      Q_conta_pagar.FieldByName('valor_parcela').AsFloat;
+      Q_conta_pagar.FieldByName('STATUS').AsString := 'EM ABERTO';
+      Q_conta_pagar.Post;
+      inc(parcela);
+      Q_conta_pagar.Next;
+    end;
+
+    //PROCEDURE PARA TRATAR A DIFERENÇA DE PARCELA
+    soma := soma + Q_padraoCOND_PGTO.Value * Q_conta_pagar.FieldByName('valor_parcela').Asfloat;
+    if soma > Q_padraoVALOR.Asfloat then
+    begin
+      diferenca := soma - Q_padraoVALOR.AsFloat;
+      Q_conta_pagar.Last;
+      Q_conta_pagar.Edit;
+      Q_conta_pagar.FieldByName('valor_parcela').Asfloat :=
+      Q_conta_pagar.FieldByName('valor_parcela').AsFloat - diferenca;
+      Q_conta_pagar.Refresh
+    end;
+
+    Messagedlg('Parcelas geradas com sucesso!', mtInformation,[mbOk],0);
+end;
+
+procedure TFrm_compra01.db_cond_pgtoExit(Sender: TObject);
+begin
+  inherited;
+  btn_gravar.Click;
+end;
+
+procedure TFrm_compra01.db_descontoClick(Sender: TObject);
+begin
+  inherited;
+  Q_padrao_item.Edit;
+end;
+
+procedure TFrm_compra01.db_descontoExit(Sender: TObject);
+begin
+  inherited;
+  if Q_padrao_item.State in [dsedit,dsinsert] then
+  begin
+    Q_padrao_itemTOTAL_ITEM.AsFloat :=
+    (Q_padrao_itemQTDE.AsFloat * Q_padrao_itemVL_CUSTO.AsFloat) -
+    Q_padrao_itemDESCONTO.AsFloat;
+    Q_padrao_item.Refresh;
+  end
+  else
+  Abort;
+end;
+
+procedure TFrm_compra01.db_id_forma_pgtoExit(Sender: TObject);
+begin
+  //Insere dados na condição de pgto
+ if (db_id_forma_pgto.Text = IntToStr(1)) or (db_id_forma_pgto.Text = IntToStr(2)) then
+  begin
+    db_cond_pgto.Text := IntToStr(1);
+    btn_gravar.Click
+  end
+  else
+  db_cond_pgto.SetFocus;
+
+end;
+
+procedure TFrm_compra01.db_id_produtoExit(Sender: TObject);
+begin
+  inherited;
+  if Q_padrao_item.State in [dsedit,dsinsert] then
+  begin
+    if Q_padrao_itemID_PRODUTO.AsInteger > 0 then
+      if Q_produto.Locate('ID_PRODUTO',Q_padrao_item.FieldByName('ID_PRODUTO').AsInteger,[]) then
+      begin
+         Q_padrao_itemQTDE.AsFloat := 1;
+         Q_padrao_itemDESCONTO.AsFloat := 0;
+         //Pegar o valor do produto
+         Q_padrao_itemVL_CUSTO.AsFloat :=
+         Q_produto.FieldByName('vl_custo').AsFloat;
+         //Soma QTDE
+         Q_padrao_itemTOTAL_ITEM.AsFloat :=
+         (Q_padrao_itemQTDE.AsFloat * Q_padrao_itemVL_CUSTO.AsFloat) -
+         (Q_padrao_itemDESCONTO.AsFloat);
+         Q_padrao_item.Post;
+         btn_item.SetFocus;
+      end
+  else
+  Messagedlg('Produto não enontrado',mtInformation,[mbOk],0);
+  Q_padrao_item.Cancel;
+  btn_item.SetFocus;
+  end
+  else
+  Abort;
+End;
+
+
+procedure TFrm_compra01.db_qtdeClick(Sender: TObject);
+begin
+  inherited;
+  Q_padrao_item.Edit;
+end;
+
+procedure TFrm_compra01.db_qtdeExit(Sender: TObject);
+begin
+  if Q_padrao_item.State in [dsedit,dsinsert] then
+  begin
+  Q_padrao_itemTOTAL_ITEM.AsFloat :=
+  (Q_padrao_itemQTDE.AsFloat * Q_padrao_itemVL_CUSTO.AsFloat) -
+  Q_padrao_itemDESCONTO.AsFloat;
+  Q_padrao_item.Refresh;
+  end
+  else
+  Abort;
+end;
+
+procedure TFrm_compra01.db_total_itemExit(Sender: TObject);
+begin
+  inherited;
+  btn_item.SetFocus;
+end;
+
+procedure TFrm_compra01.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  inherited;
+  Q_fornecedor.Close;
+  Q_forma_pgto.Close;
+  Q_conta_pagar.Close;
+  Q_padrao.Close;
+  Q_padrao_item.Close;
+end;
+
+end.
